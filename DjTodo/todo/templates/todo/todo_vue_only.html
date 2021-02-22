@@ -1,0 +1,60 @@
+<html>
+    <head>
+        <title>Todo System</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <br>
+        <article id="app">
+            <h1>My Todo App 1</h1>
+            <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+            <hr>
+
+            <div>
+                <input class="name" type="text" placeholder="name .." v-model="name">
+                <input class="item" type="text" placeholder="type anything.."
+                    v-model="newTodoItem" v-on:keyup.enter="add_todo()">
+                <button v-on:click="add_todo()">Add</button>
+            </div>
+
+            <ul class="todoList">
+                <li v-for="(todo, index) in todoItems">
+                    <span>{ todo.name } :: { todo.item }</span>
+                    <span class="removeBtn" v-on:click="remove_todo(index)">&#x00D7</span>
+                </li>
+            </ul>
+        </article>
+
+        <script src="https://unpkg.com/vue/dist/vue.js"></script>
+        <script>
+            var vm = new Vue({
+                delimiters: ['{', '}'],
+                el: '#app',
+                data: {
+                    name: '',
+                    newTodoItem: '',
+                    todoItems:[
+                        {name: 'Hyeon', item: '꽃미남 특공대'},
+                        {name: '이동현', item: 'Vue.js 연동으로 서비스를 만듭니다.'},
+                        {name: '이동현', item: 'Vue.js 연동으로 그냥 만드네요.'},
+                        {name: '이동현', item: 'Vue.js 고기반찬'},
+                    ],
+                },
+                methods: {
+                    add_todo: function() {
+                        console.log("add todo() ..")
+                        if (this.name == '') this.name = '이동현';
+                        if (this.newTodoItem == '') return;
+                        this.todoItems.push({name: this.name, item: this.newTodoItem})
+                        this.name = '';
+                        this.newTodoItem = '';
+                    },
+                    remove_todo: function(index) {
+                        console.log("remove_todo..");
+                        this.todoItems.splice(index, 1);80
+                    }
+                },
+            })
+        </script>
+    </body>
+</html>
