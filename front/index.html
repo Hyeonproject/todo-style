@@ -16,17 +16,19 @@
                     <input class="name" type="text" placeholder="name .." v-model="name">
                 </div>
                 <div class="ui big input">
-                    <input class="item" type="text" placeholder="type anything.." v-model="newTodoItem">
+                    <input class="item" type="text" placeholder="type anything.." 
+                    v-model="newTodoItem" v-on:keyup.enter="add_todo()">
                 </div>
                 <button v-on:click="add_todo()">Add</button>
             </div>
 
             <ul class="todoList">
-                <li v-for="todo in todoItems">
+                <li v-for="(todo, index) in todoItems">
                     <span>{{ todo.name }}:: {{ todo.item }}</span>
-                    <span class="removeBtn">&#x00D7</span>
+                    <span class="removeBtn" v-on:click="remove_todo(index)">&#x00D7</span>
                 </li>
             </ul>
+
         </article>
 
         <script src="https://unpkg.com/vue/dist/vue.js"></script>
@@ -46,7 +48,15 @@
                 methods: {
                     add_todo: function() {
                         console.log("add todo() ..")
+                        if (this.name == '') this.name = '이동현';
+                        if (this.newTodoItem == '') return;
                         this.todoItems.push({name: this.name, item: this.newTodoItem})
+                        this.name = '';
+                        this.newTodoItem = '';
+                    },
+                    remove_todo: function(index) {
+                        console.log("remove_todo..");
+                        this.todoItems.splice(index, 1);80
                     }
                 },
             })
