@@ -6,3 +6,9 @@ class Todo(models.Model):
 
     def __str__(self):
         return self.todo
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if not self.name:
+            self.name = '이동현'
+        super().save()

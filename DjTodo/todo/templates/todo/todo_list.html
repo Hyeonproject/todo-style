@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Todo System</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <br>
+        <article id="app">
+            <h1>My Todo App 1</h1>
+            <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+            <hr>
+            <ul class="todoList">
+                {% for todo in object_list %}
+                <li>
+                    <span>{{ todo.name }} :: {{ todo.todo }}</span>
+                    <span class="removeBtn"><a href="{% url 'todo:delete' todo.id %}">&#x00D7</a></span>
+                </li>
+                {% endfor %}
+            </ul>
+        </article>
+    </body>
+</html>

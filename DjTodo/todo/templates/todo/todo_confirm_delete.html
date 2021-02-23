@@ -1,0 +1,15 @@
+<html>
+    <head>
+        <title>Todo System</title>
+        <meta charset="UTF-8">
+    </head>
+    <body>
+        <h1>Todo Delete</h1>
+        <p>Are you sure to delete {{ object }} ?</p>
+        <br>
+        <form action="." method="post">
+            {% csrf_token %}
+            <button type="submit">Confirm</button>
+        </form>
+    </body>
+</html>
