@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Vue-Django Todo App{% endblock %}
+{% block content %}
+<br><br>
+<article id="app">
+    <h1>My Todo App 1</h1>
+    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+    <hr>
+
+    <form class="inputBox" action="." method="post"> {% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <input class="form-control mb-3" type="text" placeholder="name .." name="name">
+            </div>
+            <div class="col">
+                <input class="form-control mb-3" type="text" placeholder="type anything.." name="todo">
+            </div>
+            <div class="col">
+                <button class="btn btn-info btn-sm" type="submit">Add</button>
+            </div>
+        </div>
+    </form>
+</article>
+{% endblock %}
