@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+{% block title %}Vue-Django Todo App{% endblock %}
+{% block content %}
+<br><br>
+<article id="app">
+    <h1>My Todo App 1</h1>
+    <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+    <hr>
+
+    <form class="inputBox" action="." method="post"> {% csrf_token %}
+        <div class="row">
+            <div class="col">
+                <input class="form-control mb-3" type="text" placeholder="name .." name="name">
+            </div>
+            <div class="col">
+                <input class="form-control mb-3" type="text" placeholder="type anything.." name="todo">
+            </div>
+            <div class="col">
+                <button class="btn btn-info btn-sm" type="submit">Add</button>
+            </div>
+        </div>
+    </form>
+    <hr>
+    <ul class="todoList">
+        {% for todo in object_list %}
+        <li>
+            <span>{{ todo.name }} :: {{ todo.todo }}</span>
+            <span class="removeBtn" data-bs-toggle="modal" data-bs-target="#myModal"
+                data-bs-id="{{ todo.id }}" data-bs-name="{{ todo.name }}" data-bs-todo="{{ todo.todo }}">&#x00D7</span>
+        </li>
+        {% endfor %}
+    </ul>
+
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Delete Todo ??</h5>
+                </div>
+                <div class="modal-body">
+                    Todo List를 삭제하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger btn-sm">
+                        <a href="">Delete</a>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</article>
+{% endblock %}
+
+{% block extra-script %}
+    <script>
+        var exampleModal = document.getElementById('myModal')
+        exampleModal.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            var id = button.getAttribute('data-bs-id')
+            var name = button.getAttribute('data-bs-name')
+            var todo = button.getAttribute('data-bs-todo')
+
+            var modal = this
+            modal.find('.modal-body').text(name + ' :: ' + todo)
+            modal.find('.modal-footer a').attr('href', '/todo/' + id + '/delete2/')
+        })
+    </script>
+{% endblock %}
