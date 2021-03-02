@@ -1,5 +1,15 @@
 {% extends 'base.html' %}
 {% block title %}Vue-Django Todo App{% endblock %}
+{% block extra-style %}
+    <style>
+    .removeBtn:hover {
+        color: red;
+    }
+    .modal-footer a {
+        color: white;
+    }
+    </style>
+{% endblock %}
 {% block content %}
 <br><br>
 <article id="app">
@@ -39,7 +49,7 @@
                     <h5 class="modal-title" id="exampleModalLabel">Delete Todo ??</h5>
                 </div>
                 <div class="modal-body">
-                    Todo List를 삭제하시겠습니까?
+                    삭제하시겠습니까?
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary btn-sm" data-bs-dismiss="modal">Cancel</button>
@@ -62,9 +72,10 @@
             var name = button.getAttribute('data-bs-name')
             var todo = button.getAttribute('data-bs-todo')
 
-            var modal = this
-            modal.find('.modal-body').text(name + ' :: ' + todo)
-            modal.find('.modal-footer a').attr('href', '/todo/' + id + '/delete2/')
+            var modal = exampleModal
+
+            modal.querySelector('.modal-body').textContent = name + ' ::: ' + todo
+            modal.querySelector('.modal-footer a').href = '/todo/' + id + '/delete2/'
         })
     </script>
 {% endblock %}
