@@ -44,6 +44,9 @@
     <script src="https://unpkg.com/vue/dist/vue.js"></script>
     <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
     <script>
+        axios.defaults.xsrfCookieName = 'csrftoken';
+        axios.defaults.xsrfHeaderName = 'X-CSRFToken';
+
         var vm = new Vue({
             delimiters: ['[[', ']]'],
             el: '#app',
@@ -76,7 +79,7 @@
 
                     var vm = this;
                     var postData = {name: this.name, todo: this.todo};
-                    axios.post('/api/todo/create/', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
+                    axios.post('/api/todo/create/', postData)
                         .then(function (res) {
                             console.log("post res", res);
                             vm.todoList.push({id: res.data.id, name: res.data.name, todo: res.data.todo});
