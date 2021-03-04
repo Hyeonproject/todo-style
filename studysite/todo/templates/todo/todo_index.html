@@ -1,0 +1,107 @@
+{% extends 'base.html' %}
+
+{% block title %}Todo 서비스{% endblock %}
+
+{% block extra-style %}
+    <style>
+        .removeBtn:hover {
+            color: red;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <br>
+    <article class="container" id="app">
+        <h1>My Todo App 1</h1>
+        <strong>서로 할 일이나 의견을 공유해 봅시다.</strong>
+        <hr>
+
+        <div>
+            <div class="row">
+                <div class="col">
+                    <input class="form-control mb-3" type="text" placeholder="name .." name="name" v-model.trim="name">
+                </div>
+                <div class="col">
+                    <input class="form-control mb-3" type="text" placeholder="type anything.." name="todo" v-model.trim="todo" v-on:keyup.enter="add_todo()">
+                </div>
+                <div class="col">
+                    <button class="btn btn-info btn-sm" v-on:click="add_todo()">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <ul class="todoList">
+            <li v-for="(todo, index) in todoList">
+                <span>[[ todo.name ]] :: [[ todo.todo ]]</span>
+                <span class="removeBtn" v-on:click="remove_todo(todo, index)">&#x00D7</span>
+            </li>
+        </ul>
+    </article>
+{% endblock %}
+
+{% block extra-script %}
+    <script src="https://unpkg.com/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var vm = new Vue({
+            delimiters: ['[[', ']]'],
+            el: '#app',
+            data: {
+                name: '',
+                todo: '',
+                todoList:[
+                ],
+            },
+            created: function () {
+                console.log("created() ...")
+                this.fetch_all_todo();
+            },
+            methods: {
+                fetch_all_todo: function () {
+                    console.log("fetch_all_todo()..");
+
+                    var vm = this;
+                    axios.get('/api/todolist/')
+                    .then(function (res) {
+                        console.log("GET RES", res);
+                        vm.todoList = res.data;
+                    })
+                    .catch(function (err) {
+                        console.log("GET ERR", err);
+                    })
+                },
+                add_todo: function() {
+                    console.log("add todo() ..")
+
+                    var vm = this;
+                    var postData = {name: this.name, todo: this.todo};
+                    axios.post('/api/todo/create/', postData, {xsrfCookieName: 'csrftoken', xsrfHeaderName: 'X-CSRFToken'})
+                        .then(function (res) {
+                            console.log("post res", res);
+                            vm.todoList.push({id: res.data.id, name: res.data.name, todo: res.data.todo});
+                        })
+                        .catch(function (err) {
+                            console.log("post err", err);
+                        })
+
+                    this.name = this.todo = '';
+                },
+                remove_todo: function(todo, index) {
+                    console.log("remove_todo..", index);
+                    if (confirm("Reallhy delete ? ") == false) return;
+
+                    var vm = this;
+                    axios.delete('/api/todo/' + todo.id + '/delete/')
+                        .then(function (res) {
+                            console.log("delete res", res);
+                            vm.todoList.splice(index, 1);
+                        })
+                        .catch(function (err) {
+                            console.log("delete err", err);
+                        })
+                }
+            },
+        })
+    </script>
+{% endblock %}
